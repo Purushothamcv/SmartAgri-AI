@@ -6,25 +6,37 @@ import joblib
 
 def fetch_weather_data(lat, lon):
     try:
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m,relative_humidity_2m,precipitation,windspeed_10m&current_weather=true"
+        # Use 'current' parameter to get real-time precipitation
+        url = (
+            "https://api.open-meteo.com/v1/forecast"
+            f"?latitude={lat}&longitude={lon}"
+            "&current=temperature_2m,relative_humidity_2m,precipitation,windspeed_10m"
+            "&timezone=auto"
+        )
+
         res = requests.get(url)
         data = res.json()
 
-        if 'current_weather' in data:
-            temp = data['current_weather']['temperature']
-            wind = data['current_weather']['windspeed']
-            hourly = data['hourly']
-            humidity = hourly['relative_humidity_2m'][0]
-            rain = hourly['precipitation'][0]
-            return {
-                "temp": temp,
-                "humidity": humidity,
-                "rain": rain,
-                "wind": wind
-            }
-        else:
+        if "current" not in data:
             print("No current weather data found.")
             return None
+
+        current = data["current"]
+        
+        temp = current.get("temperature_2m", 0)
+        humidity = current.get("relative_humidity_2m", 0)
+        rain = current.get("precipitation", 0)
+        wind = current.get("windspeed_10m", 0)
+        
+        print(f"DEBUG: Temp={temp}°C, Humidity={humidity}%, Rain={rain}mm, Wind={wind}km/h")
+
+        return {
+            "temp": round(float(temp), 2),
+            "humidity": round(float(humidity), 2),
+            "rain": round(float(rain), 2),
+            "wind": round(float(wind), 2),
+        }
+
     except Exception as e:
         print("Error fetching weather data:", e)
         return None

@@ -1,9 +1,11 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 import joblib
+import os
 
 # Load the crop dataset
-crop_df = pd.read_csv('../data/crop.csv')
+base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+crop_df = pd.read_csv(os.path.join(base_path, 'data', 'crop.csv'))
 
 # Debug: Check for missing values
 print("Missing values per column:\n", crop_df.isnull().sum())
@@ -24,6 +26,7 @@ model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X, y)
 
 # Save the model
-joblib.dump(model, '../model/crop_model.pkl')
+model_path = os.path.join(base_path, 'model', 'crop_model.pkl')
+joblib.dump(model, model_path)
 
 print('Crop recommendation model trained and saved as crop_model.pkl')

@@ -8,3 +8,9 @@ requests
 folium
 streamlit-folium
 fastapi
+uvicorn
+motor
+pymongo
+passlib[bcrypt]
+python-dotenv
+pydantic[email]
