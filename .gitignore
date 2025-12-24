@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 venv/__pycache__/
 *.pyc
 *.pyo
@@ -28,3 +29,7 @@ Thumbs.db
 # Database
 *.db
 *.sqlite3
+=======
+venv/
+.env
+>>>>>>> 01c1b19081a3feb846b9ae32bf928b24dedd2301
